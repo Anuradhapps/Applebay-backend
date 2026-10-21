@@ -3,6 +3,7 @@ package com.applebay.backend.controller;
 
 import com.applebay.backend.entity.Enrollment;
 import com.applebay.backend.service.EnrollmentService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,23 +32,40 @@ public class EnrollmentController {
     }
 
     @PostMapping
-    public Enrollment createEnrollment(
+    public ResponseEntity<?> createEnrollment(
             @RequestBody Map<String, Long> request) {
 
         Long studentId = request.get("studentId");
         Long courseId = request.get("courseId");
 
         if (studentId == null || courseId == null) {
-            throw new IllegalArgumentException(
-                    "studentId and courseId are required");
+            return ResponseEntity.badRequest()
+                    .body(Map.of(
+                            "message",
+                            "studentId and courseId are required"));
         }
 
-        return enrollmentService.createEnrollment(
-                studentId, courseId);
+        try {
+            Enrollment enrollment = enrollmentService.createEnrollment(
+                    studentId, courseId);
+
+            return ResponseEntity.ok(enrollment);
+
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of(
+                            "message",
+                            ex.getMessage()));
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteEnrollment(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> deleteEnrollment(
+            @PathVariable Long id) {
+
         enrollmentService.deleteEnrollment(id);
+
+        return ResponseEntity.ok(
+                Map.of("message", "Enrollment deleted successfully"));
     }
 }
