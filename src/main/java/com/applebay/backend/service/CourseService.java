@@ -4,7 +4,7 @@ package com.applebay.backend.service;
 import com.applebay.backend.entity.Course;
 import com.applebay.backend.repository.CourseRepository;
 import org.springframework.stereotype.Service;
-
+import org.springframework.data.domain.Sort;
 import java.util.List;
 
 @Service
@@ -17,7 +17,7 @@ public class CourseService {
     }
 
     public List<Course> getAllCourses() {
-        return courseRepository.findAll();
+        return courseRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
     public Course getCourseById(Long id) {

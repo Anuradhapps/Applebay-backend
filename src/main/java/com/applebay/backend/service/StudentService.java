@@ -4,6 +4,7 @@ package com.applebay.backend.service;
 import com.applebay.backend.entity.Student;
 import com.applebay.backend.repository.StudentRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class StudentService {
     }
 
     public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+        return studentRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
     public Student getStudentById(Long id) {

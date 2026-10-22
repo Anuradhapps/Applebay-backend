@@ -9,7 +9,7 @@ import com.applebay.backend.repository.EnrollmentRepository;
 import com.applebay.backend.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.data.domain.Sort;
 import java.util.List;
 
 @Service
@@ -31,7 +31,7 @@ public class EnrollmentService {
 
     @Transactional(readOnly = true)
     public List<Enrollment> getAllEnrollments() {
-        return enrollmentRepository.findAll();
+        return enrollmentRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
     @Transactional(readOnly = true)
